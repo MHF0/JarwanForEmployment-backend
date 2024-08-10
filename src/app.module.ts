@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-
+import { ConfigModule } from '@nestjs/config';
+import { CategoriesModule } from './categories/categories.module';
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://mhamadhfarhan:GG0P8dKGWW98MuC7@cluster0.0lb2k.mongodb.net/',
-    ),
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGODB_URL),
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
