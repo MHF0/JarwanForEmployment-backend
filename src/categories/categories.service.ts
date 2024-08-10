@@ -14,9 +14,7 @@ export class CategoriesService {
   async create(createCategoryDto: CreateCategoryDto) {
     try {
       const createdCategory = new this.categoriesModel(createCategoryDto);
-      this.logger.log(
-        `Create Categories with this object: ${createCategoryDto}`,
-      );
+
       const savingCategory = await createdCategory.save();
       return {
         success: true,
