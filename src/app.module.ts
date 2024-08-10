@@ -5,12 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { CategoriesModule } from './categories/categories.module';
 import { EmployeeModule } from './employee/employee.module';
+import { CompaniesModule } from './companies/companies.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODB_URL),
     CategoriesModule,
     EmployeeModule,
+    CompaniesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
