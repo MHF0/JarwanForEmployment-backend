@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CategoriesModule } from './categories/categories.module';
 import { EmployeeModule } from './employee/employee.module';
 import { CompaniesModule } from './companies/companies.module';
+import { S3ServiceModule } from './s3-service/s3-service.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -13,6 +14,7 @@ import { CompaniesModule } from './companies/companies.module';
     CategoriesModule,
     EmployeeModule,
     CompaniesModule,
+    S3ServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

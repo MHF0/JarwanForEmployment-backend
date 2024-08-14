@@ -23,7 +23,7 @@ export class EmployeeForm {
   @Prop()
   cv: string;
 
-  @Prop({ required: true })
+  @Prop()
   acceptPolicy: boolean;
 }
 
