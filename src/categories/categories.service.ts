@@ -56,7 +56,7 @@ export class CategoriesService {
     }
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     try {
       const updatedCategory = await this.categoriesModel.findByIdAndUpdate(
         id,
