@@ -8,6 +8,9 @@ export class EmployeeForm {
   @Prop({ required: true })
   category: string;
 
+  @Prop()
+  subCategory: string;
+
   @Prop({ required: true })
   fullName: string;
 
