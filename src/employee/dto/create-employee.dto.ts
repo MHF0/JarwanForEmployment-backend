@@ -1,5 +1,6 @@
 export class CreateEmployeeDto {
   category: string;
+  subCategory?: string;
   fullName: string;
   city: string;
   description?: string;
