@@ -27,5 +27,5 @@ jobs:
         cache: 'pnpm'
     - run: pnpm install
     - run: |
-        touch: .env
+        touch .env
         echo: ${{ secrets.PROD_ENV_FILE }} > .env
