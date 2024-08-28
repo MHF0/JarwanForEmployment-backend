@@ -24,7 +24,7 @@ export class CreateCompanyDto {
     master?: boolean;
     notRequired?: boolean;
   };
-  fieldWork?: boolean;
+  fieldWork?: string;
   preferredConditions?: string;
   commission: {
     exists?: boolean;
