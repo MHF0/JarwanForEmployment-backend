@@ -46,8 +46,8 @@ export class Companies {
     notRequired: boolean;
   };
 
-  @Prop({ type: Boolean })
-  fieldWork: boolean;
+  @Prop({ type: String })
+  fieldWork: string;
 
   @Prop({ type: String })
   preferredConditions: string;
