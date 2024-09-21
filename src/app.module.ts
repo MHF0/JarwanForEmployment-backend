@@ -7,6 +7,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { EmployeeModule } from './employee/employee.module';
 import { CompaniesModule } from './companies/companies.module';
 import { S3ServiceModule } from './s3-service/s3-service.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -15,6 +16,7 @@ import { S3ServiceModule } from './s3-service/s3-service.module';
     EmployeeModule,
     CompaniesModule,
     S3ServiceModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
