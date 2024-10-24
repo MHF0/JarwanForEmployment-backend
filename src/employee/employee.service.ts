@@ -28,20 +28,30 @@ export class EmployeeService {
     }
   }
 
-  async findAll(category?: string, city?: string) {
+  async findAll(limit: number, offset: number) {
     try {
-      const employees = await this.employeeFormModel.find({
-        ...(category && { category }),
-        ...(city && { city }),
-      });
+      // Fetch the total count of employees
+      const totalCount = await this.employeeFormModel.countDocuments();
+
+      // Fetch employees with pagination (limit and skip)
+      const employees = await this.employeeFormModel
+        .find()
+        .skip(offset)
+        .limit(limit);
+
       return {
         success: true,
         message: 'Employees fetched successfully',
         data: employees,
+        totalCount, // Return total count of employees
       };
     } catch (error) {
       this.logger.error(`Error: ${error}`);
-      return error;
+      return {
+        success: false,
+        message: 'Error fetching employees',
+        error: error.message,
+      };
     }
   }
 
