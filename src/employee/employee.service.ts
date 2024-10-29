@@ -28,16 +28,22 @@ export class EmployeeService {
     }
   }
 
-  async findAll(limit: number, offset: number) {
+  async findAll(limit: number, filterCity?: string, filterCategory?: string) {
     try {
       // Fetch the total count of employees
-      const totalCount = await this.employeeFormModel.countDocuments();
 
-      // Fetch employees with pagination (limit and skip)
-      const employees = await this.employeeFormModel
-        .find()
-        .skip(offset)
-        .limit(limit);
+      // Determine if you want "AND" or "OR" condition
+      const useOrCondition = true; // Set this dynamically based on your requirements
+
+      // Build the query conditionally
+      const query = useOrCondition
+        ? { $or: [{ city: filterCity }, { category: filterCategory }] }
+        : { city: filterCity, category: filterCategory };
+
+      // Fetch employees with pagination (limit)
+      const totalCount = await this.employeeFormModel.countDocuments(query);
+
+      const employees = await this.employeeFormModel.find(query).limit(limit);
 
       return {
         success: true,
