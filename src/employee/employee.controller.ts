@@ -24,10 +24,16 @@ export class EmployeeController {
   @Get()
   findAll(
     @Query('imit') limit: number = 10,
+    @Query('page') page: number = 1,
     @Query('filterCity') filterCity?: string,
     @Query('filterCategory') filterCategory?: string,
   ) {
-    return this.employeeService.findAll(limit, filterCity, filterCategory);
+    return this.employeeService.findAll(
+      limit,
+      page,
+      filterCity,
+      filterCategory,
+    );
   }
 
   @Get(':id')

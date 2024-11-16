@@ -28,34 +28,41 @@ export class EmployeeService {
     }
   }
 
-  async findAll(limit: number, filterCity?: string, filterCategory?: string) {
+  async findAll(
+    limit: number,
+    page: number,
+    filterCity?: string,
+    filterCategory?: string,
+    search?: string,
+  ) {
     try {
-      // Fetch the total count of employees
-      const totalCount = await this.employeeFormModel.countDocuments();
+      const query: any = {};
 
-      // Determine if you want "AND" or "OR" condition
-      let useOrCondition = true; // Set this dynamically based on your requirements
-      let query = {};
+      // Apply filters
+      if (filterCity) query.city = filterCity;
+      if (filterCategory) query.category = filterCategory;
 
-      if (!filterCity && !filterCategory) {
-        query = {};
+      // Apply search
+      if (search) {
+        query.$or = [
+          { fullName: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+        ];
       }
 
-      // Build the query conditionally
-      else
-        query = useOrCondition
-          ? { $or: [{ city: filterCity }, { category: filterCategory }] }
-          : { city: filterCity, category: filterCategory };
+      const totalCount = await this.employeeFormModel.countDocuments(query);
 
-      // Fetch employees with pagination (limit)
-
-      const employees = await this.employeeFormModel.find(query).limit(limit);
+      const employees = await this.employeeFormModel
+        .find(query)
+        .skip((page - 1) * limit) // Skip records for previous pages
+        .limit(limit);
 
       return {
         success: true,
         message: 'Employees fetched successfully',
         data: employees,
-        totalCount, // Return total count of employees
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
       };
     } catch (error) {
       this.logger.error(`Error: ${error}`);
