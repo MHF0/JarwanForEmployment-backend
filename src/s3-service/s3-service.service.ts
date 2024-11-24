@@ -29,7 +29,7 @@ export class FileUploadService {
       fs.writeFileSync(filePath, file.buffer);
 
       // Return the file path or URL (adjust as needed)
-      return `/uploads/${filename}`;
+      return `${filename}`;
     } catch (error) {
       throw new BadRequestException(`Failed to upload file: ${error.message}`);
     }
