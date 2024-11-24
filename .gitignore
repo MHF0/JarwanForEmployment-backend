@@ -15,7 +15,7 @@ package-lock.json
 package-lock.json
 # OS
 .DS_Store
-
+/uploads
 # Tests
 /coverage
 /.nyc_output

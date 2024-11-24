@@ -1,44 +1,47 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
-export class S3ServiceService {
-  private s3: AWS.S3;
-  private readonly bucketName: string;
+export class FileUploadService {
+  private readonly uploadPath = path.join(__dirname, '..', '..', 'uploads');
+  constructor() {
+    // this.uploadPath = path.join(__dirname, '..', '..', 'uploads'); // Define the uploads folder
 
-  constructor(private readonly configService: ConfigService) {
-    this.s3 = new AWS.S3({
-      accessKeyId: this.configService.get<string>(
-        process.env.AWS_ACCESS_KEY_ID,
-      ),
-      secretAccessKey: this.configService.get<string>(
-        process.env.AWS_SECRET_ACCESS_KEY,
-      ),
-      region: this.configService.get<string>(process.env.AWS_REGION),
-    });
-    this.bucketName = this.configService.get<string>(
-      process.env.AWS_S3_BUCKET_NAME || 'cv-employee',
-    );
+    // Ensure the uploads folder exists
+    if (!fs.existsSync(this.uploadPath)) {
+      fs.mkdirSync(this.uploadPath, { recursive: true });
+    }
   }
-  async create(file: Express.Multer.File): Promise<string> {
+
+  async upload(file: Express.Multer.File): Promise<string> {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
 
-    const uploadParams = {
-      Bucket: 'cv-employee',
-      Key: `${uuidv4()}-${file.originalname}`,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    };
+    // Generate a unique filename
+    const filename = `${uuidv4()}-${file.originalname}`;
+    const filePath = path.join(this.uploadPath, filename);
 
     try {
-      const data = await this.s3.upload(uploadParams).promise();
-      return data.Location;
+      // Save the file to the server
+      fs.writeFileSync(filePath, file.buffer);
+
+      // Return the file path or URL (adjust as needed)
+      return `/uploads/${filename}`;
     } catch (error) {
       throw new BadRequestException(`Failed to upload file: ${error.message}`);
     }
+  }
+
+  getFile(fileName: string): string {
+    const filePath = path.join(this.uploadPath, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      throw new NotFoundException('File not found');
+    }
+
+    return filePath;
   }
 }
